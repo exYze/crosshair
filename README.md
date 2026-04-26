@@ -36,7 +36,7 @@ The normal `npm` command on this workstation points at a missing roaming install
 
 1. Open Settings.
 2. Add authorized targets, one per line.
-3. Set recon tool paths for tools installed on the workstation.
+3. Install recon tools on the workstation (this repo does not ship binaries), then set their paths in Settings.
 4. Enable local recon tools.
 5. Use the local Postgres connection string while testing: `postgres://aip:aip_dev_password@localhost:5432/crosshair`.
 6. For a remote Postgres server later, replace the connection string in Settings and keep storage enabled.
