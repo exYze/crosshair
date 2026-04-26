@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: aip-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${AIP_POSTGRES_DB:-crosshair}
+      POSTGRES_USER: ${AIP_POSTGRES_USER:-aip}
+      POSTGRES_PASSWORD: ${AIP_POSTGRES_PASSWORD:-aip_dev_password}
+    ports:
+      - "${AIP_POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - aip-postgres-data:/var/lib/postgresql/data
+      - ./scripts/postgres/001-schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  aip-postgres-data:

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crosshair Terminal</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="classification">AUTHORIZED SECURITY TESTING ONLY</div>
+    <main class="app-shell">
+      <aside class="rail">
+        <div class="orbit"></div>
+        <button class="rail-button active" title="Investigations">I</button>
+        <button class="rail-button" title="Proposals">P</button>
+        <button class="rail-button" title="Reports">R</button>
+      </aside>
+
+      <section class="terminal-panel">
+        <header class="terminal-header">
+          <div class="brand">Crosshair</div>
+          <nav>
+            <button class="nav-tab active">Investigations</button>
+            <button class="nav-tab">Proposals</button>
+            <button class="nav-tab">Reports</button>
+          </nav>
+          <button id="settingsButton" class="icon-button" title="Settings">Settings</button>
+        </header>
+
+        <div class="chat-log" id="chatLog"></div>
+
+        <form class="composer" id="chatForm">
+          <input id="chatInput" type="text" placeholder="Ask about scope, findings, validations, retests..." autocomplete="off" />
+          <button type="submit" title="Send">GO</button>
+        </form>
+      </section>
+
+      <section class="workspace-panel">
+        <header class="workspace-header">
+          <div class="menu-group">
+            <button>File</button>
+            <button>Edit</button>
+            <span class="saved">Saved</span>
+          </div>
+          <div class="workspace-title">Crosshair Overview</div>
+          <div class="app-mode">CONTROLLED MODE</div>
+        </header>
+
+        <div class="workspace-body">
+          <section class="map-area">
+            <div class="map-toolbar">
+              <select id="reconTool" aria-label="Recon tool"></select>
+              <input id="scanTarget" type="text" placeholder="Authorized target" aria-label="Scan target" />
+              <button id="runScan">Run Recon</button>
+            </div>
+            <svg id="networkMap" viewBox="0 0 1000 650" role="img" aria-label="Network map"></svg>
+            <div class="legend">
+              <span><i class="risk low"></i>Low</span>
+              <span><i class="risk medium"></i>Medium</span>
+              <span><i class="risk high"></i>High</span>
+              <span><i class="risk critical"></i>Critical</span>
+            </div>
+          </section>
+
+          <aside class="intel-panel">
+            <div class="panel-block">
+              <h2>ATT&CK Chain</h2>
+              <div id="attackChain" class="attack-chain"></div>
+            </div>
+            <div class="panel-block">
+              <h2>Recon Tools</h2>
+              <div id="toolList" class="tool-list"></div>
+            </div>
+            <div class="panel-block">
+              <h2>Findings</h2>
+              <div id="findingsList" class="findings"></div>
+            </div>
+            <div class="panel-block">
+              <h2>Operator Controls</h2>
+              <button id="validateFinding" class="wide-button">Plan Safe Validation</button>
+              <button id="retestFinding" class="wide-button secondary">Create Retest</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="settingsDialog">
+      <form method="dialog" class="settings-form" id="settingsForm">
+        <header>
+          <h2>Settings</h2>
+          <button value="cancel" title="Close">x</button>
+        </header>
+        <label>
+          API Base URL
+          <input id="apiBaseUrl" type="url" placeholder="https://api.openai.com/v1" />
+        </label>
+        <label>
+          API Key
+          <input id="apiKey" type="password" placeholder="sk-..." />
+        </label>
+        <label>
+          Model
+          <select id="model"></select>
+        </label>
+        <div id="settingsStatus" class="settings-status" role="status" aria-live="polite">Use Test API to load available models.</div>
+        <label>
+          Organization
+          <input id="organization" type="text" placeholder="Optional" />
+        </label>
+        <label>
+          Authorized Targets
+          <textarea id="scopedTargets" rows="4" placeholder="One CIDR, IP, or hostname per line"></textarea>
+        </label>
+        <label>
+          Postgres Connection String
+          <input id="postgresConnectionString" type="password" placeholder="postgres://aip:aip_dev_password@localhost:5432/crosshair" />
+        </label>
+        <label class="toggle-row">
+          <input id="postgresEnabled" type="checkbox" />
+          Store recon runs and findings in Postgres
+        </label>
+        <label>
+          Nmap Path
+          <input id="nmapPath" type="text" placeholder="nmap or C:\Program Files\Nmap\nmap.exe" />
+        </label>
+        <label>
+          Amass Path
+          <input id="amassPath" type="text" placeholder="amass" />
+        </label>
+        <label>
+          Naabu Path
+          <input id="naabuPath" type="text" placeholder="naabu" />
+        </label>
+        <label>
+          HTTPX Path
+          <input id="httpxPath" type="text" placeholder="httpx" />
+        </label>
+        <label class="toggle-row">
+          <input id="allowLocalTools" type="checkbox" />
+          Allow local discovery tools for configured scope
+        </label>
+        <label class="toggle-row">
+          <input id="allowCommandAdapters" type="checkbox" />
+          Enable custom command adapters requiring operator approval
+        </label>
+        <footer>
+          <button id="testApi" value="test-api" class="secondary">Test API</button>
+          <button id="testDatabase" value="test-db" class="secondary">Test DB</button>
+          <button value="cancel" class="secondary">Cancel</button>
+          <button id="saveSettings" value="default">Save</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>

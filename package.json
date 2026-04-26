@@ -1,0 +1,28 @@
+{
+  "name": "crosshair",
+  "version": "0.1.0",
+  "description": "Electron Crosshair assessment console with chat, ATT&CK workflows, and network mapping.",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "check": "node scripts/check-project.js",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres"
+  },
+  "keywords": [
+    "electron",
+    "crosshair",
+    "mitre-attack",
+    "security-validation"
+  ],
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "electron": "^41.3.0"
+  }
+}

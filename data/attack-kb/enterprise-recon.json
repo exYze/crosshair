@@ -1,0 +1,92 @@
+{
+  "version": "0.1.0",
+  "source": "offline-bundled",
+  "notes": "Bundled knowledge base for authorized Crosshair workflows. Add more JSON files in this folder to extend the app later.",
+  "phases": [
+    {
+      "id": "recon",
+      "name": "Reconnaissance",
+      "tactic": "TA0043",
+      "techniques": [
+        {
+          "id": "T1595",
+          "name": "Active Scanning",
+          "summary": "Actively probe in-scope infrastructure to identify hosts, services, and exposed applications."
+        },
+        {
+          "id": "T1590",
+          "name": "Gather Victim Network Information",
+          "summary": "Collect authorized network ranges, names, routing, and externally visible infrastructure."
+        },
+        {
+          "id": "T1596",
+          "name": "Search Open Technical Databases",
+          "summary": "Review approved open-source technical data such as certificates, DNS, and service banners."
+        }
+      ],
+      "defensiveUse": [
+        "Confirm owned address space before scans.",
+        "Capture timestamped evidence for every recon action.",
+        "Map each exposed service to an owner, business purpose, and validation status."
+      ]
+    },
+    {
+      "id": "discovery",
+      "name": "Discovery",
+      "tactic": "TA0007",
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "summary": "Enumerate ports and services on authorized hosts."
+        },
+        {
+          "id": "T1018",
+          "name": "Remote System Discovery",
+          "summary": "Identify reachable systems and relationships between network segments."
+        }
+      ],
+      "defensiveUse": [
+        "Compare discovered services against the expected inventory.",
+        "Flag externally reachable administrative services for validation."
+      ]
+    },
+    {
+      "id": "validation",
+      "name": "Vulnerability Validation",
+      "tactic": "TA0001",
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "summary": "Use controlled checks to confirm whether a public-facing finding is actually exploitable."
+        },
+        {
+          "id": "T1133",
+          "name": "External Remote Services",
+          "summary": "Validate exposed remote access paths through approved, non-destructive tests."
+        }
+      ],
+      "defensiveUse": [
+        "Require per-action approval before validation.",
+        "Prefer proof through version, configuration, and safe test evidence before exploit simulation."
+      ]
+    },
+    {
+      "id": "retest",
+      "name": "Remediation Retest",
+      "tactic": "Defensive Validation",
+      "techniques": [
+        {
+          "id": "PATCH-VERIFY",
+          "name": "Patch Verification",
+          "summary": "Repeat the original safe check after remediation and store closure evidence."
+        }
+      ],
+      "defensiveUse": [
+        "Retest with the same scoped target and tool profile.",
+        "Record before and after evidence in Postgres."
+      ]
+    }
+  ]
+}
