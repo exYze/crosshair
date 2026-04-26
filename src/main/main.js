@@ -82,20 +82,50 @@ const reconToolProfiles = {
 };
 
 const toolExecutableHints = {
-  nmap: [
-    "D:\\Program Files\\Nmap\\nmap.exe",
-    "D:\\Program Files (x86)\\Nmap\\nmap.exe",
-    "C:\\Program Files\\Nmap\\nmap.exe",
-    "C:\\Program Files (x86)\\Nmap\\nmap.exe"
-  ],
-  amass: [
-    path.join(__dirname, "../../tools/bin/amass.exe"),
-    "C:\\Users\\hawke\\go\\bin\\amass.exe"
-  ],
-  naabu: [
-    path.join(__dirname, "../../tools/bin/naabu.exe"),
-    "C:\\Users\\hawke\\go\\bin\\naabu.exe"
-  ]
+  win32: {
+    nmap: [
+      "C:\\Program Files\\Nmap\\nmap.exe",
+      "C:\\Program Files (x86)\\Nmap\\nmap.exe"
+    ],
+    amass: [],
+    naabu: [],
+    httpx: []
+  },
+  darwin: {
+    nmap: ["/opt/homebrew/bin/nmap", "/usr/local/bin/nmap"],
+    amass: ["/opt/homebrew/bin/amass", "/usr/local/bin/amass"],
+    naabu: ["/opt/homebrew/bin/naabu", "/usr/local/bin/naabu"],
+    httpx: ["/opt/homebrew/bin/httpx", "/usr/local/bin/httpx"]
+  },
+  linux: {
+    nmap: ["/usr/bin/nmap", "/usr/local/bin/nmap", "/snap/bin/nmap"],
+    amass: ["/usr/bin/amass", "/usr/local/bin/amass", "/snap/bin/amass"],
+    naabu: ["/usr/bin/naabu", "/usr/local/bin/naabu", "/snap/bin/naabu"],
+    httpx: ["/usr/bin/httpx", "/usr/local/bin/httpx", "/snap/bin/httpx"]
+  }
+};
+
+const platformToolInstallHints = {
+  nmap: {
+    win32: "Install Nmap from nmap.org or set Settings > Nmap Path to its full executable path, for example C:\\Program Files\\Nmap\\nmap.exe.",
+    darwin: "Install Nmap with Homebrew (`brew install nmap`) or set Settings > Nmap Path to its full executable path.",
+    linux: "Install Nmap with your distribution package manager or set Settings > Nmap Path to its full executable path."
+  },
+  amass: {
+    win32: "Install Amass and set Settings > Amass Path to the installed executable path.",
+    darwin: "Install Amass with Homebrew (`brew install amass`) or set Settings > Amass Path to its full executable path.",
+    linux: "Install Amass with your distribution package manager, Snap, or a release binary, then set Settings > Amass Path if it is not on PATH."
+  },
+  naabu: {
+    win32: "Install Naabu and set Settings > Naabu Path to the installed executable path.",
+    darwin: "Install Naabu with Homebrew or a ProjectDiscovery release binary, then set Settings > Naabu Path if it is not on PATH.",
+    linux: "Install Naabu with your package manager or a ProjectDiscovery release binary, then set Settings > Naabu Path if it is not on PATH."
+  },
+  httpx: {
+    win32: "Install ProjectDiscovery HTTPX and set Settings > HTTPX Path to the installed executable path.",
+    darwin: "Install ProjectDiscovery HTTPX with Homebrew or a release binary, then set Settings > HTTPX Path if it is not on PATH.",
+    linux: "Install ProjectDiscovery HTTPX with your package manager or a release binary, then set Settings > HTTPX Path if it is not on PATH."
+  }
 };
 
 const emptyNetwork = {
@@ -377,7 +407,8 @@ async function resolveToolCommand(tool, configuredPath) {
     return command;
   }
 
-  for (const candidate of toolExecutableHints[tool.id] || []) {
+  const platformHints = toolExecutableHints[process.platform] || toolExecutableHints.linux;
+  for (const candidate of platformHints[tool.id] || []) {
     if (await fileExists(candidate)) return candidate;
   }
 
@@ -510,9 +541,8 @@ async function confirmStartupDependencies() {
 }
 
 function missingToolMessage(tool, command) {
-  const hint = tool.id === "nmap"
-    ? "Install Nmap or set Settings > Nmap Path to the full executable path, for example C:\\Program Files\\Nmap\\nmap.exe."
-    : `Install ${tool.name} or set its full executable path in Settings.`;
+  const hint = platformToolInstallHints[tool.id]?.[process.platform]
+    || `Install ${tool.name} or set its full executable path in Settings.`;
   return `${tool.name} executable was not found (${command}). ${hint}`;
 }
 

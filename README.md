@@ -24,13 +24,13 @@ This app is designed for authorized defensive validation. The current build does
 
 ## Run
 
-```powershell
-node 'D:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js' install
+```sh
+npm install
 docker compose up -d postgres
-node 'D:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js' start
+npm start
 ```
 
-The normal `npm` command on this workstation points at a missing roaming install, so the direct npm CLI path above is the reliable launcher.
+Crosshair is an Electron app and is intended to run on Windows, Linux, and macOS with a current Node.js LTS release, npm, Docker Desktop or Docker Engine, and any recon tools you choose to enable.
 
 ## Configure
 
@@ -43,23 +43,31 @@ The normal `npm` command on this workstation points at a missing roaming install
 7. Use Test DB to create or verify the evidence schema.
 8. Add OpenAI-compatible API settings for the chat assistant.
 
-If Nmap is not in the system PATH, set `Nmap Path` to the full executable path, such as `C:\Program Files\Nmap\nmap.exe`.
+If a recon tool is not in the system `PATH`, set its full executable path in Settings. Examples include `C:\Program Files\Nmap\nmap.exe` on Windows, `/opt/homebrew/bin/nmap` on macOS, or `/usr/bin/nmap` on Linux.
+
+## Recon Tools
+
+Crosshair does not ship Nmap, Amass, Naabu, or HTTPX binaries. Install only the tools you plan to use on each workstation, then either leave the Settings path as the command name when the tool is on `PATH`, or provide the full path to the executable.
+
+- Windows: install Nmap from `nmap.org`; install ProjectDiscovery tools from their releases or your preferred package manager.
+- macOS: install common tools with Homebrew, such as `brew install nmap amass`.
+- Linux: install tools with your distribution package manager, Snap, Homebrew on Linux, or vendor release binaries.
 
 ## Local Postgres
 
-The local test database runs in Docker from [docker-compose.yml](E:/AIP/docker-compose.yml).
+The local test database runs in Docker from [docker-compose.yml](docker-compose.yml).
 
-```powershell
+```sh
 docker compose up -d postgres
 docker compose ps
 docker compose logs -f postgres
 ```
 
-The container publishes Postgres on `localhost:5432` by default. You can override database, user, password, or port with the variables listed in [.env.example](E:/AIP/.env.example).
+The container publishes Postgres on `localhost:5432` by default. You can override database, user, password, or port with the variables listed in [.env.example](.env.example).
 
 To stop the database without deleting stored data:
 
-```powershell
+```sh
 docker compose down
 ```
 
